@@ -1,2 +1,38 @@
 # NonMaxSuppression-with-Reinforcement-Learning
 A Reinforcement Learning Agent Doing Non Maximum Suppression For Object detection.
+
+
+# Setup
+Clone the repository:
+```shell
+$ git clone https://github.com/blurry-mood/NonMaxSuppression-with-Reinforcement-Learning
+```
+Install Requirements (or first create a virual environment):
+```shell
+$ cd NonMaxSuppression-with-Reinforcement-Learning
+$ pip3 install -r requirements
+```
+
+# Dataset
+The used dataset is **WIDER FACE**. It can be found [here](http://shuoyang1213.me/WIDERFACE/).  
+Please download the training, validation, testing images and the face annotations file, and place them inside `dataset/`.  
+Finally execute this command:
+```shell
+$ cd NonMaxSuppression-with-Reinforcement-Learning/dataset
+$ sh setup.sh
+```
+
+# Train
+
+
+# Evaluate
+
+
+# Citation
+```
+@inproceedings{yang2016wider,
+                Author = {Yang, Shuo and Luo, Ping and Loy, Chen Change and Tang, Xiaoou},
+                Booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+                Title = {WIDER FACE: A Face Detection Benchmark},
+                Year = {2016}}
+```
