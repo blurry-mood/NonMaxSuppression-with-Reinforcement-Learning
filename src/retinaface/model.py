@@ -1,21 +1,19 @@
+""" This repository was taken from https://github.com/biubug6/Pytorch_Retinaface"""
+
 import os
-from models.retina import Retina
-from config import cfg_mnet
+from .models.retina import Retina
+from .config import cfg_mnet
 import torch
-import matplotlib
-
-matplotlib.use('GTK3Agg')
-
 
 def check_keys(model, pretrained_state_dict):
     ckpt_keys = set(pretrained_state_dict.keys())
     model_keys = set(model.state_dict().keys())
     used_pretrained_keys = model_keys & ckpt_keys
-    unused_pretrained_keys = ckpt_keys - model_keys
-    missing_keys = model_keys - ckpt_keys
-    print('Missing keys:{}'.format(len(missing_keys)))
-    print('Unused checkpoint keys:{}'.format(len(unused_pretrained_keys)))
-    print('Used keys:{}'.format(len(used_pretrained_keys)))
+    # unused_pretrained_keys = ckpt_keys - model_keys
+    # missing_keys = model_keys - ckpt_keys
+    # print('Missing keys:{}'.format(len(missing_keys)))
+    # print('Unused checkpoint keys:{}'.format(len(unused_pretrained_keys)))
+    # print('Used keys:{}'.format(len(used_pretrained_keys)))
     assert len(used_pretrained_keys) > 0, 'load NONE from pretrained checkpoint'
     return True
 
@@ -57,5 +55,3 @@ def get_trained_model(width, height=None):
     net.eval()
 
     return net
-
-get_trained_model(512)
