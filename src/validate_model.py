@@ -28,9 +28,6 @@ size = args.imgsz
 conf_thres = args.conf_thres
 iou_thres = args.iou_thres
 
-print(f"{size=}, {conf_thres=}, {iou_thres=}")
-
-
 image_paths = glob(join(_CURRENT_DIR, '..', 'dataset', f'WIDER_{split_set}', 'images', '**', '*.jpg'), recursive=True)
 assert image_paths != [], "We couldn't find any image !"
 print(f"{len(image_paths)} image(s) are found!")
@@ -46,14 +43,9 @@ def get_bboxes(img):
     boxes, scores = _model(img)
     
     mask = scores > conf_thres
-    print(scores.shape, mask.sum())
-    print(scores.max(), scores.min())
-
     boxes = boxes[mask]
     scores = scores[mask]
     
-    print(scores.shape, mask.sum())
-
     inds = batched_nms(boxes, scores, torch.tensor([0 for _ in range(scores.shape[0])]), iou_threshold=iou_thres)
 
     return boxes[inds].int().numpy()
