@@ -1,3 +1,4 @@
 torchmetrics
 rl_algorithms
 tqdm
+torch
