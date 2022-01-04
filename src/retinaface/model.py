@@ -45,7 +45,6 @@ def get_trained_model(width, height=None):
         height = width
     PATH = os.path.split(os.path.abspath(__file__))[0]
 
-    torch.set_grad_enabled(False)
     cfg = cfg_mnet
 
     # net and model
