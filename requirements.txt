@@ -3,3 +3,5 @@ rl_algorithms
 tqdm
 torch
 gym
+opencv-python
+torchvision
