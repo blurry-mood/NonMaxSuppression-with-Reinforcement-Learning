@@ -66,9 +66,17 @@ class ModelEnv(Env):
         repeat = True
         while repeat:
             img = np.random.choice(self.image_paths)
-
             self.labels = parse_label_file(splitext(img)[0] + '.txt')
-            self.img = cv.resize(cv.imread(img), (self.img_size, self.img_size))
+
+            img = cv.imread(img)
+
+            # rescaling bounding boxes, and format to x1, y1, x2, y2
+            self.labels[:, 0] = self.labels[:, 0] / img.shape[1] * self.img_size
+            self.labels[:, 2] = self.labels[:, 2] / img.shape[1] * self.img_size + self.labels[:, 0]
+            self.labels[:, 1] = self.labels[:, 1] / img.shape[0] * self.img_size
+            self.labels[:, 3] = self.labels[:, 3] / img.shape[0] * self.img_size + self.labels[:, 1]
+
+            self.img = cv.resize(img, (self.img_size, self.img_size))
 
             with torch.no_grad():
                 bboxes = get_bboxes(self._model, self.img, self.conf_thres)
@@ -89,32 +97,35 @@ class ModelEnv(Env):
         return deepcopy(self.state)
 
     def _compute_reward(self):
-        mask = self.state.sum(dim=1) > 0
-        bboxes = self.bboxes[mask]
+        mask = self.state[:self.current_box].sum(dim=1) != 0
+        bboxes = self.bboxes[:self.current_box][mask]
         boxes = bboxes[:, :4]
         scores = bboxes[:, 4]
         preds = {'boxes': boxes, 'scores': scores, 'labels': torch.zeros(scores.shape[0]).long()}
         target = {'boxes': self.labels, 'labels': torch.zeros(len(self.labels)).long()}
-        return self.map([preds], [target])['map_50'].item()
+        reward = self.map([preds], [target])
+        reward = reward['map_50'].item()
+        self.map.reset()
+        return reward
 
     def step(self, action):
         assert action == 0 or action == 1, 'Invalid action, choose either 0 or 1'
 
         if self.current_box == self.state.shape[0]:
-            reward = self._compute_reward()
-            return deepcopy(self.state), reward, True, {}
+            return deepcopy(self.state), self._compute_reward(), True, {}
+
 
         if action == 0:
             self.state[self.current_box] = 0
         else:
             self.state[self.current_box] = -1
 
+
         self.current_box += 1
 
-        return deepcopy(self.state), 0, False, {}
+        return deepcopy(self.state), self._compute_reward(), False, {}
 
     def render(self, mode=''):
-
         img_cp = deepcopy(self.img)
         mask = self.state[:self.current_box].sum(dim=1) != 0
         bboxes = self.bboxes[:self.current_box]
