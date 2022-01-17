@@ -1,8 +1,10 @@
+import time
+
+from matplotlib import pyplot as plt
 from tqdm.auto import tqdm
 
 from rl_algorithms import DQN
 from torch import nn
-import numpy as np
 import torch
 from environment import ModelEnv
 from config import *
@@ -64,7 +66,7 @@ for i in range(EPISODES):
             env.render()
 
             pbar.update(1)
-            pbar.set_postfix({'reward': reward, 'loss': loss, 'Number of bboxes': env.observation_space.shape})
+            pbar.set_postfix({'reward': reward, 'loss': loss, 'Number of bboxes': env.observation_space.shape[0]})
 
     dqn.buffer.buffer.clear()
 
@@ -73,3 +75,17 @@ for i in range(EPISODES):
     dqn.save(join(_CURRENT_DIR, '..', 'artifacts', 'dqn'))
 
 env.close()
+
+plt.plot(rewards)
+plt.xlabel("Episodes")
+plt.ylabel("Reward")
+plt.title("Reward per episode")
+plt.savefig(join(_CURRENT_DIR, '..', 'artifacts', 'reward.png'))
+plt.show()
+
+plt.plot(losses)
+plt.xlabel("Episodes")
+plt.ylabel("Loss")
+plt.title("Loss per episode")
+plt.savefig(join(_CURRENT_DIR, '..', 'artifacts', 'loss.png'))
+plt.show()
