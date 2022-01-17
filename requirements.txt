@@ -5,3 +5,4 @@ torch
 gym
 opencv-python
 torchvision
+matplotlib
