@@ -2,10 +2,6 @@
 A Reinforcement Learning Agent Doing Non Maximum Suppression For Object detection.
 
 
-
-
-
-
 # Setup
 Clone the repository:
 ```shell
@@ -27,7 +23,14 @@ $ sh setup.sh
 ```
 
 # Train
-
+Training the agent is done by executing this command:
+```shell
+$ cd NonMaxSuppression-with-Reinforcement-Learning/src
+$ python3 train_agent.py
+```
+After every episode, the agent will be saved the model to `artifacts/dqn.pth`.
+A UI will be shown to visualize the training process. 
+At every step in the episode, chosen bounding-boxes will be visualized.
 
 # Evaluate
 
