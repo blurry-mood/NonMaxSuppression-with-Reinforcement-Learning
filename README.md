@@ -32,8 +32,6 @@ After every episode, the agent will be saved the model to `artifacts/dqn.pth`.
 A UI will be shown to visualize the training process. 
 At every step in the episode, chosen bounding-boxes will be visualized.
 
-# Evaluate
-
 
 # Citation
 ```
